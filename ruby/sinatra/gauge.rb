@@ -41,6 +41,7 @@ class Gauge < Sinatra::Base
       end
 
       if errors.count > 0
+        status 400
         json errors: errors
       end
 
