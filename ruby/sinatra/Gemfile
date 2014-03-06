@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 gem 'sinatra'
-gem 'foreman'
 gem 'sinatra-contrib'
-gem 'shotgun'
 gem 'unicorn'
+gem 'jbuilder'
+
+group :development do
+  gem 'shotgun', :group => :development
+end
+
+ruby '2.1.0'
