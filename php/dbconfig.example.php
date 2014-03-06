@@ -11,4 +11,3 @@ $db_name = "torque";
 $db_table = "raw_logs";
 
 ?>
-

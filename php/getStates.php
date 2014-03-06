@@ -49,6 +49,8 @@
 
 	if(count($errors) > 0)
 	{
+		header("HTTP/1.1 400 Bad Request", true, 400);
+
 		$output = array("errors" => $errors);
 	}
 	else
