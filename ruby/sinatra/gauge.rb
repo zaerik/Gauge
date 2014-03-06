@@ -1,5 +1,5 @@
-require 'sinatra'
-require 'sinatra/json'
+require 'sinatra/base'
+require 'jbuilder'
 require 'sinatra/namespace'
 
 class Error
@@ -16,11 +16,15 @@ end
 class Gauge < Sinatra::Base
 
   register Sinatra::Namespace
-  register Sinatra::JSON
 
-  namespace '/gauge/api' do
-    get '/' do
+  get '/' do
+    'Gauge'
+  end
 
+  namespace '/api' do
+
+    get do
+      'API'
     end
 
     get '/states.json' do
@@ -30,7 +34,7 @@ class Gauge < Sinatra::Base
       user_id = params[:user_id]
       session_id = params[:session_id]
 
-      errors = Array.new()
+      errors = Array.new
 
       if user_id == nil
         errors << Error.new(102, "Missing user_id.")
@@ -41,8 +45,18 @@ class Gauge < Sinatra::Base
       end
 
       if errors.count > 0
+        
         status 400
-        json errors: errors
+
+        Jbuilder.encode do |json|
+
+          json.errors errors.each do |error|
+            json.code error.code
+            json.message error.message
+          end
+
+        end
+        
       end
 
     end
