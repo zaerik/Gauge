@@ -1,33 +1,3 @@
-/*div#stationsContainer
-{
-	margin-bottom:25px;
-}
-
-div#flotContainer
-{
-	width:75%;
-	height:500px;
-}
-
-table#pressureVsTime
-{
-	margin-top:50px;
-	background:#000000;
-	color:#FFFFFF;
-}
-
-table#pressureVsTime th
-{
-	padding:3px;
-}
-
-table#pressureVsTime td
-{
-	background:#FFFFFF;
-	color:#000000;
-	padding:3px;
-	text-align:center;
-}*/
 body
 {
 	font-family: sans-serif;
