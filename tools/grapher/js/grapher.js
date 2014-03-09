@@ -160,15 +160,28 @@ function displayStates(userID, sessionID, startTime, endTime)
 	);
 }
 
-function displayData(states, parameterNames)
+function displayData(states, parameterNames, xParameterName)
 {
 	// If there is any data
 	if(states.length > 0)
 	{
+		var timeMode = false;
+
 		// Default to plotting Engine RPM (PID 0C)
 		if(parameterNames === undefined)
 		{
 			parameterNames = ["kc"];
+		}
+
+		// Default to time as the x-axis
+		if(xParameterName === undefined)
+		{
+			xParameterName = "time";
+		}
+
+		if(xParameterName == "time")
+		{
+			timeMode = true;
 		}
 
 		var plotData = new Array();
@@ -186,11 +199,21 @@ function displayData(states, parameterNames)
 		// Populate plotData array
 		for(j = 0; j < endJ; j++)
 		{
-			var date = new Date(Number(states[j].time));
+			if(timeMode)
+			{
+				var date = new Date(Number(states[j].time));
+			}
 
 			for(i = 0; i < endI; i++)
 			{
-				plotData[i][j] = [date.getTime(), Number(states[j][parameterNames[i]])];
+				plotData[i][j] =
+				[
+					// If x-axis is time, use date object
+					(timeMode ? date.getTime() : Number(states[j][xParameterName])),
+
+					// The DB stores parameter names in lowercase
+					Number(states[j][parameterNames[i].toLowerCase()])
+				];
 			}
 		}
 
@@ -210,15 +233,19 @@ function displayData(states, parameterNames)
 		{
 			xaxis:
 			{
-				mode: "time",
+				mode: (timeMode ? "time" : null),	// Only if the x-axis is time
 
 				tickFormatter:
-					function(tickValue, axis)
-					{
-						var date = new Date(tickValue);
+					(timeMode ?	// Only if the x-axis is time
+						function(tickValue, axis)
+						{
+							var date = new Date(tickValue);
 
-						return $.format.date(date, dateFormatString);
-					},
+							return $.format.date(date, dateFormatString);
+						}
+					:
+						null
+					),
 			},
 			
 			legend:
