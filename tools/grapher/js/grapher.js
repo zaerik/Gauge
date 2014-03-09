@@ -1,8 +1,12 @@
 var obd2PIDInfo;
 var torquePIDInfo;
 
+var dateFormatString = "yyyy MMM dd, HH:mm";
+
 $(document).ready()
 {
+	var userID = "2eb9298f0ab2e17d470f015efe13f255";
+
 	// Load OBD2 PID Info file
 	$.ajax(
 		{
@@ -15,7 +19,7 @@ $(document).ready()
 				},
 
 			dataType: "json",
-			async: false
+			async: false	// Wait until the file is loaded before continuing
 		}
 	);
 
@@ -31,11 +35,25 @@ $(document).ready()
 				},
 
 			dataType: "json",
-			async: false
+			async: false	// Wait until the file is loaded before continuing
 		}
 	);
 
-	displayStates("2eb9298f0ab2e17d470f015efe13f255", "1393518715834");
+	$.ajax(
+		{
+			url: config.getSessionsURI + "?user_id=" + userID,
+
+			success:
+				function(data)
+				{
+					fillSessionsDropdown(data.sessions.sort(sortBySessionID).reverse());
+
+					displayStates(userID, data.sessions.sort(sortBySessionID).reverse()[0]);
+				},
+
+			dataType: "json"
+		}
+	);
 }
 
 function displayServerErrors(errors)
@@ -71,29 +89,35 @@ function getPIDDescription(pidString)
 	// If it has more than 2 digits, then it is a Torque internal PID
 	if(pidString.length > 2)
 	{
-		var length = torquePIDInfo.length;
-
-		for(h = 0; h < length; h++)
+		if(torquePIDInfo !== undefined)
 		{
-			if(torquePIDInfo[h].pid.toUpperCase() == pidString)
-			{
-				output = torquePIDInfo[h].description;
+			var length = torquePIDInfo.length;
 
-				break;
+			for(h = 0; h < length; h++)
+			{
+				if(torquePIDInfo[h].pid.toUpperCase() == pidString)
+				{
+					output = torquePIDInfo[h].description;
+
+					break;
+				}
 			}
 		}
 	}
 	else	// Otherwise, it is a standard PID
 	{
-		var length = obd2PIDInfo.length;
-
-		for(h = 0; h < length; h++)
+		if(obd2PIDInfo !== undefined)
 		{
-			if(obd2PIDInfo[h].pid.toUpperCase() == pidString)
-			{
-				output = obd2PIDInfo[h].description;
+			var length = obd2PIDInfo.length;
 
-				break;
+			for(h = 0; h < length; h++)
+			{
+				if(obd2PIDInfo[h].pid.toUpperCase() == pidString)
+				{
+					output = obd2PIDInfo[h].description;
+
+					break;
+				}
 			}
 		}
 	}
@@ -141,6 +165,7 @@ function displayData(states, parameterNames)
 	// If there is any data
 	if(states.length > 0)
 	{
+		// Default to plotting Engine RPM (PID 0C)
 		if(parameterNames === undefined)
 		{
 			parameterNames = ["kc"];
@@ -192,7 +217,7 @@ function displayData(states, parameterNames)
 					{
 						var date = new Date(tickValue);
 
-						return $.format.date(date, "MMM dd, HH:mm")
+						return $.format.date(date, dateFormatString);
 					},
 			},
 			
@@ -221,7 +246,36 @@ function displayData(states, parameterNames)
 	}
 }
 
+function fillSessionsDropdown(sessions)
+{
+	output = "<select>";
+	
+	for(i = 0; i < sessions.length; i++)
+	{
+		output +=	"<option value='" + sessions[i] + "'>" +
+						sessions[i] +
+						"&nbsp;&nbsp;(" + $.format.date(new Date(Number(sessions[i])), dateFormatString) + ")" +
+					"</option>";
+	}
+	
+	output += "</select>";
+	
+	$("#sessionSelectContainer").html(output)
+		.children("select")
+		.change(	// Bind onchange event
+			function(event)
+			{	
+				displayStates(userID, $(this).val());
+			}
+		);
+}
+
 function sortByTime(a, b)
 {
 	return Number(a.time) - Number(b.time);
+}
+
+function sortBySessionID(a, b)
+{
+	return Number(a) - Number(b);
 }

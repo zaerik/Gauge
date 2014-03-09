@@ -1,6 +1,22 @@
 body
 {
 	font-family: sans-serif;
+	font-size: 11pt;
+}
+
+h2
+{
+	font-size: 20pt;
+}
+
+div#sessionContainer
+{
+	margin-bottom: 2em;
+}
+
+div#sessionSelectContainer
+{
+	display: inline;
 }
 
 div#flotContainer

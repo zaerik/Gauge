@@ -5,6 +5,7 @@
 var config = 
 {
 	getStatesURI: "/gauge/api/getStates.php",
+	getSessionsURI: "/gauge/api/getSessions.php",
 	obd2PIDInfoURI: "/gauge/tools/obd2PIDInfo.json",
 	torquePIDInfoURI: "/gauge/tools/torquePIDInfo.json"
 }
