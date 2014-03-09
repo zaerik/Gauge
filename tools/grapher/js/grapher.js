@@ -186,11 +186,11 @@ function displayData(states, parameterNames)
 		// Populate plotData array
 		for(j = 0; j < endJ; j++)
 		{
+			var date = new Date(Number(states[j].time));
+
 			for(i = 0; i < endI; i++)
 			{
-				var date = new Date(Number(states[j].time));
-
-				plotData[i][j] = [date.getTime(), Number(states[j][parameterNames])];
+				plotData[i][j] = [date.getTime(), Number(states[j][parameterNames[i]])];
 			}
 		}
 
