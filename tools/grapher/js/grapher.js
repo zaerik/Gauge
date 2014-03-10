@@ -39,6 +39,36 @@ $(document).ready()
 		}
 	);
 
+	// Load Torque PID Units file (since the units are user configurable in the app)
+	$.ajax(
+		{
+			url: config.torquePIDUnitsURI,
+			
+			success:
+				function(data)
+				{
+					var endI = data.length;
+					var endJ = torquePIDInfo.length;
+
+					for(i = 0; i < endI; i++)
+					{
+						for(j = 0; j < endJ; j++)
+						{
+							if(torquePIDInfo[j].pid == data[i].pid)
+							{
+								torquePIDInfo[j].unit = data[i].unit;
+
+								break;
+							}
+						}
+					}
+				},
+
+			dataType: "json",
+			async: false	// Wait until the file is loaded before continuing
+		}
+	);
+
 	$.ajax(
 		{
 			url: config.getSessionsURI + "?user_id=" + userID,
@@ -73,59 +103,76 @@ function displayServerErrors(errors)
 	$("#consoleContainer").html(output);
 }
 
-function getPIDDescription(pidString)
+function getPIDDescription(pidString, addUnits)
 {
 	var output = "";
 
-	// Remove the leading 'k' and convert to upper case
-	pidString = pidString.slice(1).toUpperCase();
-
-	// Add a preceding '0' if necessary
-	if(pidString.length <= 1)
+	if(pidString.toLowerCase() == "time")
 	{
-		pidString = "0" + pidString;
+		output = "Time";
 	}
-
-	// If it has more than 2 digits, then it is a Torque internal PID
-	if(pidString.length > 2)
+	else
 	{
-		if(torquePIDInfo !== undefined)
+		// Remove the leading 'k' and convert to upper case
+		pidString = pidString.slice(1).toUpperCase();
+
+		// Add a preceding '0' if necessary
+		if(pidString.length <= 1)
 		{
-			var length = torquePIDInfo.length;
+			pidString = "0" + pidString;
+		}
 
-			for(h = 0; h < length; h++)
+		// If it has more than 2 digits, then it is a Torque internal PID
+		if(pidString.length > 2)
+		{
+			if(torquePIDInfo !== undefined)
 			{
-				if(torquePIDInfo[h].pid.toUpperCase() == pidString)
-				{
-					output = torquePIDInfo[h].description;
+				var length = torquePIDInfo.length;
 
-					break;
+				for(h = 0; h < length; h++)
+				{
+					if(torquePIDInfo[h].pid.toUpperCase() == pidString)
+					{
+						output = torquePIDInfo[h].description;
+
+						if(addUnits && torquePIDInfo[h].unit !== undefined && torquePIDInfo[h].unit !== null)
+						{
+							output += " (" + torquePIDInfo[h].unit + ")";
+						}
+
+						break;
+					}
 				}
 			}
 		}
-	}
-	else	// Otherwise, it is a standard PID
-	{
-		if(obd2PIDInfo !== undefined)
+		else	// Otherwise, it is a standard PID
 		{
-			var length = obd2PIDInfo.length;
-
-			for(h = 0; h < length; h++)
+			if(obd2PIDInfo !== undefined)
 			{
-				if(obd2PIDInfo[h].pid.toUpperCase() == pidString)
-				{
-					output = obd2PIDInfo[h].description;
+				var length = obd2PIDInfo.length;
 
-					break;
+				for(h = 0; h < length; h++)
+				{
+					if(obd2PIDInfo[h].pid.toUpperCase() == pidString)
+					{
+						output = obd2PIDInfo[h].description;
+
+						if(addUnits && obd2PIDInfo[h].unit !== undefined && obd2PIDInfo[h].unit !== null)
+						{
+							output += " (" + obd2PIDInfo[h].unit + ")";
+						}
+
+						break;
+					}
 				}
 			}
 		}
-	}
 
-	// In case no result is found, use the PID as the label
-	if(output == "")
-	{
-		output = pidString;
+		// In case no result is found, use the PID as the label
+		if(output == "")
+		{
+			output = pidString;
+		}
 	}
 
 	return output;
@@ -144,7 +191,7 @@ function displayStates(userID, sessionID, startTime, endTime)
 			success:
 				function(data)
 				{
-					displayData(data.states.sort(sortByTime));	// Sort by time
+					displayData(data.states.sort(sortByTime), ["kc", "kff1001"]);	// Sort by time
 				},
 
 			error:
@@ -217,14 +264,23 @@ function displayData(states, parameterNames, xParameterName)
 			}
 		}
 
+		var pidDescriptions = new Array();
+		var flotOptionsYAxes = new Array();
+
 		// Create the object to pass into Flot
 		for(i = 0; i < endI; i++)
 		{
+			pidDescriptions[i] = getPIDDescription(parameterNames[i], (parameterNames[i] == "kc" ? false : true));
 			flotData[i] =
 			{
 				data: plotData[i],
-				label: getPIDDescription(parameterNames[i]),
+				label: pidDescriptions[i],
 				yaxis: i + 1
+			};
+
+			flotOptionsYAxes[i] =
+			{
+				axisLabel: pidDescriptions[i],
 			};
 		}
 
@@ -246,7 +302,11 @@ function displayData(states, parameterNames, xParameterName)
 					:
 						null
 					),
+
+				axisLabel: getPIDDescription(xParameterName)
 			},
+
+			yaxes: flotOptionsYAxes,
 			
 			legend:
 			{
@@ -264,7 +324,10 @@ function displayData(states, parameterNames, xParameterName)
 			$("#flotContainer"),
 			flotData,
 			flotOptions
-		)
+		);
+
+		// Somewhere this gets arbitrarily set, so reset it to default
+		$(".axisLabels").css("color", "");
 	}
 	else
 	{

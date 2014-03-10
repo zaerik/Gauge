@@ -1,0 +1,218 @@
+[
+    {
+        "pid":"ff1005",
+        "unit":"degrees"
+    },
+    {
+        "pid":"ff1006",
+        "unit":"degrees"
+    },
+    {
+        "pid":"ff1001",
+        "unit":"km/h"
+    },
+    {
+        "pid":"ff1010",
+        "unit":"m"
+    },
+    {
+        "pid":"ff1007",
+        "unit":"degrees"
+    },
+    {
+        "pid":"ff1201",
+        "unit":"mpg"
+    },
+    {
+        "pid":"ff1202",
+        "unit":"psi"
+    },
+    {
+        "pid":"ff1203",
+        "unit":"km/L"
+    },
+    {
+        "pid":"ff1205",
+        "unit":"mpg"
+    },
+    {
+        "pid":"ff1206",
+        "unit":"km/L"
+    },
+    {
+        "pid":"ff1207",
+        "unit":"L/km"
+    },
+    {
+        "pid":"ff1208",
+        "unit":"L/km"
+    },
+    {
+        "pid":"ff120A",
+        "unit":"Manifold Vacuum"
+    },
+    {
+        "pid":"ff120B",
+        "unit":"km"
+    },
+    {
+        "pid":"ff120C",
+        "unit":"km"
+    },
+    {
+        "pid":"ff1220",
+        "unit":"g"
+    },
+    {
+        "pid":"ff1221",
+        "unit":"g"
+    },
+    {
+        "pid":"ff1222",
+        "unit":"g"
+    },
+    {
+        "pid":"ff1223",
+        "unit":"g"
+    },
+    {
+        "pid":"ff1225",
+        "unit":"N-m"
+    },
+    {
+        "pid":"ff1226",
+        "unit":"hp"
+    },
+    {
+        "pid":"ff122d",
+        "unit":"0-60 mph time"
+    },
+    {
+        "pid":"ff122e",
+        "unit":"0-100 kph time"
+    },
+    {
+        "pid":"ff122f",
+        "unit":"Quarter mile time"
+    },
+    {
+        "pid":"ff1230",
+        "unit":"eighth mile time"
+    },
+    {
+        "pid":"ff1237",
+        "unit":"GPS vs OBD speed diff"
+    },
+    {
+        "pid":"ff1238",
+        "unit":"V"
+    },
+    {
+        "pid":"ff1239",
+        "unit":"m"
+    },
+    {
+        "pid":"ff123A",
+        "unit":null
+    },
+    {
+        "pid":"ff123B",
+        "unit":"degrees"
+    },
+    {
+        "pid":"ff1214",
+        "unit":"O2 Sensors 1x1"
+    },
+    {
+        "pid":"ff1215",
+        "unit":"O2 Sensors 1x2"
+    },
+    {
+        "pid":"ff1216",
+        "unit":"O2 Sensors 1x3"
+    },
+    {
+        "pid":"ff1217",
+        "unit":"O2 Sensors 1x4"
+    },
+    {
+        "pid":"ff1218",
+        "unit":"O2 Sensors 2x1"
+    },
+    {
+        "pid":"ff1219",
+        "unit":"O2 Sensors 2x2"
+    },
+    {
+        "pid":"ff121A",
+        "unit":"O2 Sensors 2x3"
+    },
+    {
+        "pid":"ff121B",
+        "unit":"O2 Sensors 2x4"
+    },
+    {
+        "pid":"ff1240",
+        "unit":null
+    },
+    {
+        "pid":"ff1241",
+        "unit":null
+    },
+    {
+        "pid":"ff1242",
+        "unit":null
+    },
+    {
+        "pid":"ff1243",
+        "unit":null
+    },
+    {
+        "pid":"ff1244",
+        "unit":null
+    },
+    {
+        "pid":"ff1245",
+        "unit":null
+    },
+    {
+        "pid":"ff1246",
+        "unit":null
+    },
+    {
+        "pid":"ff1247",
+        "unit":null
+    },
+    {
+        "pid":"ff1249",
+        "unit":null
+    },
+    {
+        "pid":"ff1257",
+        "unit":"g/km"
+    },
+    {
+        "pid":"ff1258",
+        "unit":"g/km"
+    },
+    {
+        "pid":"ff125a",
+        "unit":"Fuel rate"
+    },
+    {
+        "pid":"ff125b",
+        "unit":"Fuel cost (trip)"
+    },
+    {
+        "pid":"ff125c",
+        "unit":"Fuel used (trip)"
+    },
+    {
+        "pid":"ff1255",
+        "unit":"Torque RPM component"
+    },
+    {
+        "pid":"ff1256",
+        "unit":"HorsePower RPM component"
+    }
+]
