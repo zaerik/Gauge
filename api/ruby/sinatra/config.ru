@@ -1,5 +1,5 @@
 require './gauge'
 
 use Rack::ShowExceptions
- 
-run Gauge.new
+
+run Gauge

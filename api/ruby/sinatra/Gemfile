@@ -3,6 +3,7 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'unicorn'
 gem 'jbuilder'
+gem 'mysql2'
 
 group :development do
   gem 'shotgun', :group => :development
