@@ -33,6 +33,45 @@ class Gauge < Sinatra::Base
       'API'
     end
 
+    get '/sessions.json' do
+
+      content_type :json
+
+      errors = Array.new
+
+      if params[:user_id] == nil
+        errors << Error.new(102, "Missing user_id.")
+      end
+
+      if errors.count > 0
+
+        status 400
+
+        Jbuilder.encode do |json|
+          json.errors errors.each do |error|
+            json.code error.code
+            json.message error.message
+          end
+        end
+
+      else
+
+        user_id = @@client.escape(params[:user_id])
+
+        sessions = @@client.query("SELECT DISTINCT id, session FROM raw_logs WHERE id='#{user_id}'")
+
+        Jbuilder.encode do |json|
+          json.array! sessions.each do |session|
+            session.each do |key, value|
+              json.set! key, value
+            end
+          end
+        end
+
+      end
+
+    end
+
     get '/states.json' do
 
       content_type :json
