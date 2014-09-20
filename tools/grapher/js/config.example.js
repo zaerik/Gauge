@@ -4,9 +4,10 @@
 
 var config = 
 {
-	getStatesURI: "/gauge/api/getStates.php",
-	getSessionsURI: "/gauge/api/getSessions.php",
-	obd2PIDInfoURI: "/gauge/tools/obd2PIDInfo.json",
-	torquePIDInfoURI: "/gauge/tools/torquePIDInfo.json",
-	torquePIDUnitsURI: "/gauge/tools/torquePIDUnits.json"
+	getSessionsURI:		"/gauge/api/getSessions.php",
+	getStatesURI:		"/gauge/api/getStates.php",
+	obd2PIDInfoURI:		"/gauge/tools/obd2PIDInfo.json",
+	saveDataURI:		"/gauge/api/saveData.php",
+	torquePIDInfoURI:	"/gauge/tools/torquePIDInfo.json",
+	torquePIDUnitsURI:	"/gauge/tools/torquePIDUnits.json"
 }

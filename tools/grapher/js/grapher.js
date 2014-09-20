@@ -185,12 +185,20 @@ function displayStates(userID, sessionID, startTime, endTime)
 			url:
 				config.getStatesURI + "?user_id=" + userID +
 				"&session_id=" + sessionID +
-				(startTime ? ("&start_time=" + startTime) : "") +	// Optional paramters
+				(startTime ? ("&start_time=" + startTime) : "") +	// Optional parameters
 				(endTime ? ("&end_time=" + endTime) : ""),
 
 			success:
 				function(data)
 				{
+					// Enable download button
+					$("#downloadSessionButton").removeAttr("disabled")
+						.click(
+							function(event)
+							{
+								downloadSession(data);
+							}
+						);
 					displayData(data.states.sort(sortByTime), ["kc", "kff1001"]);	// Sort by time
 				},
 
@@ -358,6 +366,18 @@ function fillSessionsDropdown(sessions)
 				displayStates(userID, $(this).val());
 			}
 		);
+}
+
+function downloadSession(sessionData)
+{
+	// There has to be a better way to do open a new window/tab and start a download triggered by POST data...
+	window.open('', 'TheWindow');
+	$(
+		"<form method='post' action='" + config.saveDataURI + "' target='TheWindow'>" +
+			"<input type='hidden' name='session_id' value='" + sessionData.session_id + "'>" +
+			"<input type='hidden' name='data' value='" + JSON.stringify(sessionData) + "'>" +
+		"</form>"
+	).submit();
 }
 
 function sortByTime(a, b)
