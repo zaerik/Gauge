@@ -80,6 +80,13 @@ $(document).ready()
 
 					displayStates(userID, data.sessions.sort(sortBySessionID).reverse()[0]);
 				},
+			
+			error: function(jqXHR)
+				{
+					$("#mainContainer").html("");
+
+					displayServerErrors($.parseJSON(jqXHR.responseText).errors);
+				},
 
 			dataType: "json"
 		}
@@ -199,6 +206,26 @@ function displayStates(userID, sessionID, startTime, endTime)
 								downloadSession(data);
 							}
 						);
+					
+					// Setup file upload element
+					$("#sessionUpload").fileupload(
+						{
+							url: config.loadDataURI,
+							dataType: "json",
+							
+							success: importSession,
+							
+							error: function(jqXHR)
+								{
+									$("#mainContainer").html("");
+
+									displayServerErrors($.parseJSON(jqXHR.responseText).errors);
+								}
+						}
+					);
+					
+					$("#uploadSessionButton").click(uploadSession);
+					
 					displayData(data.states.sort(sortByTime), ["kc", "kff1001"]);	// Sort by time
 				},
 
@@ -378,6 +405,16 @@ function downloadSession(sessionData)
 			"<input type='hidden' name='data' value='" + JSON.stringify(sessionData) + "'>" +
 		"</form>"
 	).submit();
+}
+
+function uploadSession(event)
+{
+	$("#sessionUpload").click();
+}
+
+function importSession(data)
+{
+	console.log(data);
 }
 
 function sortByTime(a, b)

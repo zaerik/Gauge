@@ -12,6 +12,7 @@ h2
 div#sessionContainer
 {
 	margin-bottom: 2em;
+	width: 75%;
 }
 
 div#sessionSelectContainer
@@ -19,10 +20,25 @@ div#sessionSelectContainer
 	display: inline;
 }
 
+div#sessionButtonContainer
+{
+	float: right;
+}
+
+button#uploadSessionButton
+{
+	margin-left: 1em;
+}
+
+div#uploadSessionFormContainer
+{
+	display: none;
+}
+
 div#flotContainer
 {
-	width:75%;
-	height:500px;
+	width: 75%;
+	height: 500px;
 }
 
 div#consoleContainer

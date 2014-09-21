@@ -13,10 +13,12 @@
 		</style>
 		
 		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
 		<script type="text/javascript" src="js/jquery.flot.js"></script>
 		<script type="text/javascript" src="js/jquery.flot.time.js"></script>
 		<script type="text/javascript" src="js/jquery.flot.axislabels.js"></script>
 		<script type="text/javascript" src="js/jquery.dateFormat.js"></script>
+		<script type="text/javascript" src="js/jquery.fileupload.js"></script>
 		<script type="text/javascript" src="js/config.js"></script>
 		<script type="text/javascript" src="js/grapher.js"></script>
 	</head>
@@ -29,7 +31,11 @@
 					<option>Loading...</option>
 				</select>
 			</div>
-			<button id="downloadSessionButton" disabled="disabled">Download Session</button>
+			<div id="sessionButtonContainer">
+				<button id="downloadSessionButton" disabled="disabled">Download Session</button>
+				<button id="uploadSessionButton">Upload Session</button>
+				<input id="sessionUpload" type="file" name="file" style="display: none;" multiple="multiple" />
+			</div>
 		</div>
 		<div id="mainContainer">Loading...<div id='flotContainer'></div></div>
 		<div id="consoleContainer"></div>
