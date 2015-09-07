@@ -16,21 +16,19 @@
 	$errors = array();
 	$sessions = array();
 
-	$con = mysql_connect($db_host, $db_user, $db_pass);
+	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
-	if (!$con)
+	if (!$link)
 	{
 		array_push($errors, new Error("Could not connect to database", 101));
 	}
 	else
 	{
-		mysql_select_db($db_name, $con);
-
 		date_default_timezone_set("UTC");
 
 		if(isset($_GET["user_id"]))
 		{
-			$user_id = mysql_real_escape_string($_GET["user_id"]);
+			$user_id = mysqli_real_escape_string($link, $_GET["user_id"]);
 		}
 		else
 		{
@@ -46,9 +44,9 @@
 	}
 	else
 	{
-		$result = mysql_query("SELECT DISTINCT session FROM raw_logs WHERE id='$user_id'");
+		$result = mysqli_query($link, "SELECT DISTINCT session FROM raw_logs WHERE id='$user_id'");
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+		while($row = mysqli_fetch_array($result))
 		{
 			array_push($sessions, $row["session"]);
 		}
@@ -60,5 +58,5 @@
 
 	echo(json_encode($output));
 
-	mysql_close($con);
+	mysqli_close($link);
 ?>

@@ -16,21 +16,19 @@
 	$errors = array();
 	$states = array();
 
-	$con = mysql_connect($db_host, $db_user, $db_pass);
+	$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
-	if (!$con)
+	if (!$link)
 	{
 		array_push($errors, new Error("Could not connect to database", 101));
 	}
 	else
 	{
-		mysql_select_db($db_name, $con);
-
 		date_default_timezone_set("UTC");
 
 		if(isset($_GET["user_id"]))
 		{
-			$user_id = mysql_real_escape_string($_GET["user_id"]);
+			$user_id = mysqli_real_escape_string($link, $_GET["user_id"]);
 		}
 		else
 		{
@@ -39,7 +37,7 @@
 
 		if(isset($_GET["session_id"]))
 		{
-			$session_id = mysql_real_escape_string($_GET["session_id"]);
+			$session_id = mysqli_real_escape_string($link, $_GET["session_id"]);
 		}
 		else
 		{
@@ -57,7 +55,7 @@
 	{
 		if(isset($_GET["start_time"]) && is_numeric($_GET["start_time"]))
 		{
-			$start_time = mysql_real_escape_string($_GET["start_time"]);
+			$start_time = mysqli_real_escape_string($link, $_GET["start_time"]);
 		}
 		else
 		{
@@ -67,17 +65,17 @@
 
 		if(isset($_GET["end_time"]) && is_numeric($_GET["end_time"]))
 		{
-			$end_time = mysql_real_escape_string($_GET["end_time"]);
+			$end_time = mysqli_real_escape_string($link, $_GET["end_time"]);
 		}
 		else
 		{
 			// Default to the current time
-			$end_time = mysql_real_escape_string(time() . "000");	// There has to be a better way of doing this, but if time() is multiplied by 1000, it turns into a float and its string representation becomes one that MySQL apparently can't understand...
+			$end_time = mysqli_real_escape_string($link, time() . "000");	// There has to be a better way of doing this, but if time() is multiplied by 1000, it turns into a float and its string representation becomes one that MySQL apparently can't understand...
 		}
 
-		$result = mysql_query("SELECT * FROM raw_logs WHERE id='$user_id' AND session='$session_id' AND time BETWEEN '$start_time' AND '$end_time'");
+		$result = mysqli_query($link, "SELECT * FROM raw_logs WHERE id='$user_id' AND session='$session_id' AND time BETWEEN '$start_time' AND '$end_time'");
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+		while($row = mysqli_fetch_array($result))
 		{
 			array_push($states, $row);
 		}
@@ -89,5 +87,5 @@
 
 	echo(json_encode($output));
 
-	mysql_close($con);
+	mysqli_close($link);
 ?>
