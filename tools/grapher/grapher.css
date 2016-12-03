@@ -18,6 +18,7 @@ div#sessionContainer
 div#sessionSelectContainer
 {
 	display: inline;
+	margin-right: 1em;
 }
 
 div#sessionButtonContainer

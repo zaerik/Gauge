@@ -5,7 +5,8 @@ var dateFormatString = "yyyy MMM dd, HH:mm";
 
 $(document).ready()
 {
-	var userID = "2eb9298f0ab2e17d470f015efe13f255";
+	//var userID = "2eb9298f0ab2e17d470f015efe13f255";
+	var userID = "230275d1efcd46cece2834da81918c42";
 
 	// Load OBD2 PID Info file
 	$.ajax(
@@ -27,7 +28,7 @@ $(document).ready()
 	$.ajax(
 		{
 			url: config.torquePIDInfoURI,
-			
+
 			success:
 				function(data)
 				{
@@ -43,7 +44,7 @@ $(document).ready()
 	$.ajax(
 		{
 			url: config.torquePIDUnitsURI,
-			
+
 			success:
 				function(data)
 				{
@@ -80,7 +81,7 @@ $(document).ready()
 
 					displayStates(userID, data.sessions.sort(sortBySessionID).reverse()[0]);
 				},
-			
+
 			error: function(jqXHR)
 				{
 					$("#mainContainer").html("");
@@ -206,15 +207,15 @@ function displayStates(userID, sessionID, startTime, endTime)
 								downloadSession(data);
 							}
 						);
-					
+
 					// Setup file upload element
 					$("#sessionUpload").fileupload(
 						{
 							url: config.loadDataURI,
 							dataType: "json",
-							
+
 							success: importSession,
-							
+
 							error: function(jqXHR)
 								{
 									$("#mainContainer").html("");
@@ -223,9 +224,9 @@ function displayStates(userID, sessionID, startTime, endTime)
 								}
 						}
 					);
-					
+
 					$("#uploadSessionButton").click(uploadSession);
-					
+
 					displayData(data.states.sort(sortByTime), ["kc", "kff1001"]);	// Sort by time
 				},
 
@@ -265,6 +266,11 @@ function displayData(states, parameterNames, xParameterName)
 		{
 			timeMode = true;
 		}
+		
+		// Display the profile name
+		// Todo: search through states to dynamically find the state(s) that have a populated
+		// profile name, usually only one state per session does
+		$("#sessionProfileContainer").html("Session Profile: " + states[1].profileName);
 
 		var plotData = new Array();
 		var flotData = new Array();
@@ -342,7 +348,7 @@ function displayData(states, parameterNames, xParameterName)
 			},
 
 			yaxes: flotOptionsYAxes,
-			
+
 			legend:
 			{
 				show: true,
@@ -374,7 +380,7 @@ function displayData(states, parameterNames, xParameterName)
 function fillSessionsDropdown(sessions)
 {
 	output = "<select>";
-	
+
 	for(i = 0; i < sessions.length; i++)
 	{
 		output +=	"<option value='" + sessions[i] + "'>" +
@@ -382,14 +388,14 @@ function fillSessionsDropdown(sessions)
 						"&nbsp;&nbsp;(" + $.format.date(new Date(Number(sessions[i])), dateFormatString) + ")" +
 					"</option>";
 	}
-	
+
 	output += "</select>";
-	
+
 	$("#sessionSelectContainer").html(output)
 		.children("select")
 		.change(	// Bind onchange event
 			function(event)
-			{	
+			{
 				displayStates(userID, $(this).val());
 			}
 		);
