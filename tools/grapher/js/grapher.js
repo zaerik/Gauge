@@ -266,17 +266,14 @@ function displayData(states, parameterNames, xParameterName)
 		{
 			timeMode = true;
 		}
-		
-		// Display the profile name
-		// Todo: search through states to dynamically find the state(s) that have a populated
-		// profile name, usually only one state per session does
-		$("#sessionProfileContainer").html("Session Profile: " + states[1].profileName);
 
 		var plotData = new Array();
 		var flotData = new Array();
 
 		var endI = parameterNames.length;
 		var endJ = states.length;
+		
+		var profileNames = new Array();
 
 		// Setup plotData array
 		for(i = 0; i < endI; i++)
@@ -303,8 +300,17 @@ function displayData(states, parameterNames, xParameterName)
 					Number(states[j][parameterNames[i].toLowerCase()])
 				];
 			}
+			
+			// Look for the state(s) that contain the profile name
+			if(states[j].profileName != "0")
+			{
+				profileNames[profileNames.length] = states[j].profileName;
+			}
 		}
-
+		
+		// Display the profile name
+		$("#sessionProfileContainer").html("Session Profile: " + toCommaSeparatedString(profileNames));
+		
 		var pidDescriptions = new Array();
 		var flotOptionsYAxes = new Array();
 
@@ -431,4 +437,24 @@ function sortByTime(a, b)
 function sortBySessionID(a, b)
 {
 	return Number(a) - Number(b);
+}
+
+function toCommaSeparatedString(list)
+{
+	var output = "";
+	
+	if(list.length > 0)
+	{
+		output = list[0];
+		
+		if(list.length > 1)
+		{
+			for(h = 1; h < list.length; h++)
+			{
+				output += ", " + list[h];
+			}
+		}
+	}
+	
+	return output;
 }
